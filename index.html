@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hussein Wardrobe — خزانتك بتصميمك</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Reem+Kufi:wght@500;700&family=Aref+Ruqaa:wght@700&family=Lalezar&family=Cormorant+Garamond:ital,wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#e8edf0;--panel:#fff;--ink:#14202b;--mute:#6a7885;--line:#d5dde3;--acc:#6d2540;--acc2:#e4efee}
+*{box-sizing:border-box}
+body{margin:0;font-family:Cairo,sans-serif;background:var(--paper);color:var(--ink)}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--ink);color:#fff}
+header h1{font:700 22px 'Reem Kufi',serif;margin:0;letter-spacing:.5px}
+header span{font-size:13px;color:#9fb0bd}
+main{display:grid;grid-template-columns:340px 1fr;gap:20px;padding:20px 28px;max-width:1300px;margin:auto}
+.panel{background:var(--panel);border-radius:14px;padding:18px;border:1px solid var(--line);align-self:start}
+.panel h3{font:700 15px 'Reem Kufi';margin:18px 0 10px;color:var(--acc)}
+.panel h3:first-child{margin-top:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:999px;font:600 13px Cairo;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.chip:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.sw.on{box-shadow:0 0 0 2px var(--acc)}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mute);flex:1;min-width:90px}
+input[type=text],select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font:500 14px Cairo;background:#fff}
+input[type=color]{width:100%;height:36px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#fff}
+input[type=range]{width:100%;accent-color:var(--acc)}
+.btn{border:0;background:var(--acc);color:#fff;padding:10px 16px;border-radius:9px;font:700 14px Cairo;cursor:pointer}
+.btn.alt{background:var(--acc2);color:var(--acc)}
+.btn.del{background:#f7e4e4;color:#a33}
+.stage{background:var(--panel);border-radius:14px;border:1px solid var(--line);padding:16px;display:flex;flex-direction:column;align-items:center}
+.stage .bar{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.stage .bar b{font:700 18px 'Reem Kufi'}
+#svg{width:100%;max-width:560px;height:auto;touch-action:none;background:radial-gradient(circle at 50% 40%,#f7f9fa,#dfe6ea);border-radius:12px}
+.hint{font-size:12px;color:var(--mute);margin-top:8px}
+#editor{display:none;margin-top:6px}
+@media(max-width:860px){main{grid-template-columns:1fr;padding:12px}header{padding:12px 16px}}
+
+body{background:#e3e9ed}
+header{background:linear-gradient(90deg,#0e1a24,#1c3a3d);padding:16px 32px}
+header h1{font-size:26px}
+header h1:after{content:"";display:block;width:34px;height:2px;background:#c9a45c;margin-top:5px}
+main{grid-template-columns:380px 1fr}
+.panel{padding:0;overflow:hidden;box-shadow:0 8px 30px rgba(20,32,43,.07)}
+.panel>h3{margin:0;padding:12px 18px;background:#f3f6f8;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:14px;color:var(--ink)}
+.panel>h3:first-child{border-top:0}
+.panel>div,.panel>#editor{padding:14px 18px}
+#garments{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gcard{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 4px 6px;cursor:pointer;color:#c3ccd3;font:600 12px Cairo;display:flex;flex-direction:column;align-items:center;gap:2px;transition:.15s}
+.gcard svg{width:52px;height:60px}.gcard span{color:var(--ink)}
+.gcard:hover{border-color:var(--acc)}
+.gcard.on{border-color:var(--acc);background:var(--acc2);color:var(--acc)}
+.pdot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-inline-end:6px;vertical-align:-1px;box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.stage{position:sticky;top:12px;align-self:start;box-shadow:0 8px 30px rgba(20,32,43,.07)}
+#svg{max-width:600px}
+
+:root{--paper:#e4e6e8;--ink:#16181d;--acc:#6d2540;--acc2:#f1e6ea;--line:#cdd2d6}
+html{scroll-behavior:smooth}
+body{background:#e4e6e8;color:#16181d}
+.btn{background:#6d2540}.btn.alt{background:#f1e6ea;color:#6d2540}.chip.on{background:#6d2540;border-color:#6d2540}
+.gcard.on{border-color:#6d2540;background:#f1e6ea;color:#6d2540}.panel>h3{color:#16181d}
+nav{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:12px 40px;background:rgba(228,230,232,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.brand{font:700 26px 'Cormorant Garamond',serif;letter-spacing:.5px;direction:ltr;color:#16181d;text-decoration:none}
+.brand small{font:500 13px 'Cormorant Garamond',serif;font-style:italic;margin-inline-start:8px;color:#6d2540}
+nav .links{display:flex;gap:26px}nav a.l{color:#16181d;text-decoration:none;font-weight:600;font-size:14px}nav a.l:hover{color:#6d2540}
+.wrap{max-width:1300px;margin:auto;padding:0 28px}
+.hero{padding:64px 0 10px;display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:end}
+.hero h1{font:700 clamp(38px,6vw,72px)/1.15 'Reem Kufi',serif;margin:0}
+.hero p{font-size:17px;line-height:1.9;color:#4a525c;max-width:460px;margin:18px 0 26px}
+.hero .cta{display:inline-block;background:#16181d;color:#fff;padding:14px 30px;border-radius:999px;text-decoration:none;font-weight:700}
+.hero .cta:hover{background:#6d2540}
+.hero .meta{font:italic 500 20px 'Cormorant Garamond',serif;color:#6d2540;direction:ltr;text-align:left}
+.rail{position:relative;margin:24px 0 0;padding-top:14px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;border-top:0}
+.rail:before{content:"";position:absolute;top:10px;inset-inline:0;height:4px;background:#16181d;border-radius:2px}
+.rail button{flex:0 0 150px;background:none;border:0;cursor:pointer;font:600 13px Cairo;color:#16181d;transform-origin:50% 0;padding:0}
+.rail button svg{width:100%;height:auto;display:block}
+.rail button:hover{animation:sway 2.4s ease-in-out infinite}
+.rail button span{display:block;margin-top:2px}
+@keyframes sway{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
+@media(prefers-reduced-motion:reduce){.rail button:hover{animation:none}}
+.sh{padding:70px 0 6px;max-width:1300px;margin:auto;padding-inline:28px}
+.sh h2{font:700 34px 'Reem Kufi';margin:0}.sh p{color:#4a525c;margin:6px 0 0}
+.det{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid #16181d;margin:0 0 10px}
+.det div{padding:26px 24px 30px;border-inline-start:1px solid var(--line)}.det div:first-child{border-inline-start:0}
+.det h4{font:700 20px 'Reem Kufi';margin:0 0 8px}.det p{margin:0;color:#4a525c;line-height:1.9;font-size:15px}
+footer{background:#16181d;color:#c4cad1;margin-top:60px;padding:34px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+footer .brand{color:#fff}
+@media(max-width:860px){nav{padding:10px 16px}nav .links{gap:14px}.hero{grid-template-columns:1fr;padding-top:36px}.hero .meta{text-align:right}.det{grid-template-columns:1fr}.det div{border-inline-start:0;border-top:1px solid var(--line)}.sh{padding-inline:12px}}
+</style>
+</head>
+<body>
+<nav><a class="brand" href="#top">Hussein<small>Wardrobe</small></a><div class="links"><a class="l" href="#collection">المجموعة</a><a class="l" href="#studio">الاستوديو</a><a class="l" href="#details">التفاصيل</a></div></nav>
+<div class="wrap" id="top"><section class="hero"><div><h1>خزانتك،<br>من تصميمك.</h1><p>اختر القطعة من الخزانة، لوّن القماش والحواف وخيط الخياطة، وأضف اسمك أو صورتك، وشاهد النتيجة فوراً.</p><a class="cta" href="#studio">ابدأ التصميم</a></div><div class="meta">Made to your measure of taste</div></section>
+<div id="collection"><div class="rail" id="rail"></div></div></div>
+<section id="studio"><div class="sh"><h2>الاستوديو</h2><p>عدّل كل تفصيلة بنفسك، ثم احفظ التصميم كصورة.</p></div>
+<main>
+<section class="panel" aria-label="أدوات التصميم">
+  <h3>القطعة</h3>
+  <div class="row" id="garments"></div>
+  <h3>تصاميم جاهزة</h3>
+  <div class="row" id="presets"></div>
+  <h3>النقشة</h3>
+  <div class="row" id="patterns"></div>
+  <h3>الألوان</h3>
+  <div class="row">
+    <label class="f">القماش الأساسي<input type="color" id="cMain" value="#f2f2f0"></label>
+    <label class="f">الأكمام / الجوانب<input type="color" id="cSec" value="#f2f2f0"></label>
+  </div>
+  <div class="row" style="margin-top:8px">
+    <label class="f">الياقة والحواف<input type="color" id="cTrim" value="#14202b"></label>
+    <label class="f">خيط الخياطة<input type="color" id="cStitch" value="#9aa7b0"></label>
+  </div>
+  <div class="row" id="swatches" style="margin-top:10px"></div>
+  <h3>الطباعة</h3>
+  <div class="row">
+    <button class="btn" id="addText">+ نص أو اسم</button>
+    <button class="btn alt" id="addImg">+ صورة</button>
+    <input type="file" id="file" accept="image/*" hidden>
+  </div>
+  <div id="editor">
+    <h3>تعديل العنصر المحدد</h3>
+    <div id="textCtl">
+      <input type="text" id="tVal" aria-label="النص">
+      <div class="row" style="margin-top:8px">
+        <label class="f">الخط<select id="tFont">
+          <option value="Cairo">كايرو</option><option value="Reem Kufi">ريم كوفي</option>
+          <option value="Aref Ruqaa">عارف رقعة</option><option value="Lalezar">لالزار</option>
+          <option value="Georgia">Georgia</option><option value="Impact">Impact</option>
+        </select></label>
+        <label class="f">لون النص<input type="color" id="tCol" value="#14202b"></label>
+      </div>
+    </div>
+    <label class="f" style="margin-top:8px">الحجم<input type="range" id="size" min="10" max="320" value="40"></label>
+    <label class="f" style="margin-top:8px">التدوير<input type="range" id="rot" min="-180" max="180" value="0"></label>
+    <button class="btn del" id="del" style="margin-top:10px">حذف العنصر</button>
+  </div>
+</section>
+
+<section class="stage">
+  <div class="bar"><b id="title">تيشيرت</b>
+    <div class="row"><button class="chip" id="flip">الخلف / الأمام</button><button class="btn" id="save">حفظ صورة PNG</button></div></div>
+  <svg id="svg" viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg" aria-label="معاينة القطعة"></svg>
+  <div class="hint">اسحب العناصر بالماوس أو الإصبع لتحريكها، واضغط على أي عنصر لتعديله.</div>
+</section>
+</main></section>
+<section id="details" class="wrap"><div class="sh" style="padding-inline:0;padding-top:50px"><h2>التفاصيل</h2></div><div class="det">
+<div><h4>ألوان بأجزاء</h4><p>القماش الأساسي والأكمام والحواف وخيط الخياطة، كل جزء له لونه.</p></div>
+<div><h4>نقشات</h4><p>خطوط ونقاط ومربعات وتدرّج، فوق أي لون تختاره.</p></div>
+<div><h4>أسماء وصور</h4><p>أضف اسماً أو صورة على الأمام أو الخلف، بأي حجم وزاوية.</p></div></div></section>
+<footer><a class="brand" href="#top">Hussein<small>Wardrobe</small></a><span>© Hussein Wardrobe</span></footer>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+const G={
+ tshirt:{name:'تيشيرت',
+  parts:[
+   {r:'sec',d:'M132 62 L60 102 L90 172 L122 152 Z'},
+   {r:'sec',d:'M268 62 L340 102 L310 172 L278 152 Z'},
+   {r:'main',d:'M132 62 Q200 98 268 62 L278 152 L280 432 L120 432 L122 152 Z',body:1},
+   {r:'trim',d:'M150 64 Q200 116 250 64 L262 68 Q200 134 138 68 Z'}],
+  stitch:['M122 420 H278','M66 108 L94 164','M334 108 L306 164','M122 152 L122 428','M278 152 L278 428','M150 74 Q200 124 250 74']},
+ pants:{name:'بنطلون',
+  parts:[
+   {r:'main',d:'M112 70 H200 L186 442 H124 Z',body:1},
+   {r:'sec',d:'M200 70 H288 L276 442 H214 Z',body:1},
+   {r:'trim',d:'M108 38 H292 V72 H108 Z'},
+   {r:'trim',d:'M124 428 H186 V442 H124 Z'},{r:'trim',d:'M214 428 H276 V442 H214 Z'}],
+  stitch:['M200 72 V240','M112 82 H288','M132 96 Q150 130 170 96','M268 96 Q250 130 230 96','M126 420 H184','M216 420 H274','M200 240 L192 300']},
+ jacket:{name:'جاكيت',
+  parts:[
+   {r:'sec',d:'M132 60 L62 108 L38 402 L88 410 L116 196 L120 120 Z'},
+   {r:'sec',d:'M268 60 L338 108 L362 402 L312 410 L284 196 L280 120 Z'},
+   {r:'main',d:'M132 60 Q200 92 268 60 L280 120 L284 430 L116 430 L120 120 Z',body:1},
+   {r:'trim',d:'M130 58 Q200 104 270 58 L276 84 Q200 130 124 84 Z'},
+   {r:'trim',d:'M116 416 H284 V434 H116 Z'},
+   {r:'trim',d:'M38 388 L88 396 L88 412 L38 404 Z'},{r:'trim',d:'M362 388 L312 396 L312 412 L362 404 Z'}],
+  stitch:['M200 96 V416','M126 408 H274','M60 130 L48 380','M340 130 L352 380','M136 250 H172','M228 250 H264']}
+};
+Object.assign(G,{
+ long:{name:'تيشيرت كم طويل',
+  parts:[{r:'sec',d:'M132 62 L64 112 L44 372 L86 382 L118 190 L122 150 Z'},{r:'sec',d:'M268 62 L336 112 L356 372 L314 382 L282 190 L278 150 Z'},
+   {r:'main',d:'M132 62 Q200 98 268 62 L278 150 L280 432 L120 432 L122 150 Z',body:1},
+   {r:'trim',d:'M150 64 Q200 116 250 64 L262 68 Q200 134 138 68 Z'},
+   {r:'trim',d:'M46 356 L88 364 L86 382 L44 374 Z'},{r:'trim',d:'M354 356 L312 364 L314 382 L356 374 Z'}],
+  stitch:['M122 420 H278','M122 150 L122 428','M278 150 L278 428','M70 120 L52 350','M330 120 L348 350']},
+ hoodie:{name:'هودي',
+  parts:[{r:'sec',d:'M132 66 L64 116 L44 376 L86 386 L118 194 L122 154 Z'},{r:'sec',d:'M268 66 L336 116 L356 376 L314 386 L282 194 L278 154 Z'},
+   {r:'trim',d:'M138 70 Q200 6 262 70 Q232 100 200 104 Q168 100 138 70 Z'},
+   {r:'main',d:'M138 70 Q200 106 262 70 L278 154 L282 432 L118 432 L122 154 Z',body:1},
+   {r:'trim',d:'M150 318 H250 L264 384 H136 Z'},{r:'trim',d:'M118 418 H282 V434 H118 Z'},
+   {r:'trim',d:'M46 360 L88 368 L86 386 L44 378 Z'},{r:'trim',d:'M354 360 L312 368 L314 386 L356 378 Z'}],
+  stitch:['M186 108 V176','M214 108 V176','M150 318 L136 384','M250 318 L264 384','M200 104 V318']},
+ polo:{name:'بولو',
+  parts:[{r:'sec',d:'M132 62 L60 102 L90 172 L122 152 Z'},{r:'sec',d:'M268 62 L340 102 L310 172 L278 152 Z'},
+   {r:'main',d:'M132 62 Q200 98 268 62 L278 152 L280 432 L120 432 L122 152 Z',body:1},
+   {r:'trim',d:'M146 62 L200 104 L254 62 L272 72 L200 134 L128 72 Z'},{r:'trim',d:'M192 104 H208 V196 H192 Z'}],
+  stitch:['M122 420 H278','M200 110 V190','M66 108 L94 164','M334 108 L306 164']},
+ tank:{name:'فانيلة',
+  parts:[{r:'main',d:'M150 36 L174 36 Q200 112 226 36 L250 36 L286 140 L282 432 L118 432 L114 140 Z',body:1},
+   {r:'trim',d:'M174 36 Q200 118 226 36 L236 36 Q200 136 164 36 Z'},{r:'trim',d:'M118 420 H282 V434 H118 Z'}],
+  stitch:['M126 408 H274','M150 44 L118 140','M250 44 L282 140']},
+ shorts:{name:'شورت',
+  parts:[{r:'main',d:'M110 92 H200 L190 300 H104 Z',body:1},{r:'sec',d:'M200 92 H290 L296 300 H210 Z',body:1},
+   {r:'trim',d:'M108 60 H292 V94 H108 Z'},{r:'trim',d:'M104 286 H190 V302 H104 Z'},{r:'trim',d:'M210 286 H296 V302 H210 Z'}],
+  stitch:['M200 94 V196','M112 108 H288','M108 276 H190','M212 276 H294']},
+ dress:{name:'فستان',
+  parts:[{r:'main',d:'M156 48 Q200 94 244 48 L264 72 L250 190 L306 430 L94 430 L150 190 L136 72 Z',body:1},
+   {r:'trim',d:'M156 48 Q200 108 244 48 L254 56 Q200 124 146 56 Z'},{r:'trim',d:'M148 182 H252 L250 204 H150 Z'},{r:'trim',d:'M94 416 H306 L308 432 H92 Z'}],
+  stitch:['M172 214 L142 414','M200 214 V414','M228 214 L258 414','M150 74 L158 176','M250 74 L242 176']}
+});
+/* الظهر: قصّات واقعية لكل قطعة */
+const TB=['M122 420 H278','M122 152 L122 428','M278 152 L278 428','M66 108 L94 164','M334 108 L306 164'];
+function mkBack(k,repl,stitch,parts){const g=G[k];
+ g.back={parts:parts||g.parts.map((p,i)=>repl[i]===undefined?p:(repl[i]===null?null:Object.assign({},p,{d:repl[i]}))).filter(Boolean),stitch};}
+const BM='M132 62 Q200 78 268 62 L278 152 L280 432 L120 432 L122 152 Z';
+mkBack('tshirt',{2:BM,3:'M152 64 Q200 82 248 64 L258 70 Q200 96 142 70 Z'},TB.concat('M152 72 Q200 90 248 72'));
+mkBack('long',{2:BM,3:'M152 64 Q200 82 248 64 L258 70 Q200 96 142 70 Z'},['M122 420 H278','M122 150 L122 428','M278 150 L278 428','M70 120 L52 350','M330 120 L348 350']);
+mkBack('polo',{2:BM,3:'M148 62 Q200 84 252 62 L266 70 Q200 102 134 70 Z',4:null},TB);
+mkBack('tank',{0:'M150 36 L176 36 Q200 70 224 36 L250 36 L286 140 L282 432 L118 432 L114 140 Z',1:'M176 36 Q200 76 224 36 L232 36 Q200 88 168 36 Z'},['M126 408 H274','M150 44 L118 140','M250 44 L282 140']);
+mkBack('jacket',{2:'M132 60 Q200 74 268 60 L280 120 L284 430 L116 430 L120 120 Z',3:'M132 58 Q200 82 268 58 L272 76 Q200 98 128 76 Z'},['M200 84 V416','M124 122 Q200 136 276 122','M126 408 H274','M60 130 L48 380','M340 130 L352 380']);
+mkBack('dress',{0:'M156 48 Q200 68 244 48 L264 72 L250 190 L306 430 L94 430 L150 190 L136 72 Z',1:'M156 48 Q200 74 244 48 L252 54 Q200 86 148 54 Z'},['M200 70 V418','M172 214 L142 414','M228 214 L258 414']);
+mkBack('pants',{},['M200 72 V232','M112 82 H288','M124 114 H182 L178 178 H128 Z','M218 114 H276 L272 178 H222 Z','M124 124 H181','M219 124 H276','M126 420 H184','M216 420 H274','M116 96 L160 118','M284 96 L240 118']);
+mkBack('shorts',{},['M200 94 V196','M112 108 H288','M124 122 H182 L178 178 H128 Z','M218 122 H276 L272 178 H222 Z','M108 276 H190','M212 276 H294']);
+mkBack('hoodie',{},['M200 44 V204','M148 198 Q200 224 252 198','M126 420 H274','M122 154 L122 428','M278 154 L278 428'],[
+ {r:'sec',d:'M132 66 L64 116 L44 376 L86 386 L118 194 L122 154 Z'},{r:'sec',d:'M268 66 L336 116 L356 376 L314 386 L282 194 L278 154 Z'},
+ {r:'main',d:'M138 70 Q200 90 262 70 L278 154 L282 432 L118 432 L122 154 Z',body:1},
+ {r:'trim',d:'M138 68 Q200 2 262 68 L254 198 Q200 226 146 198 Z'},
+ {r:'trim',d:'M118 418 H282 V434 H118 Z'},{r:'trim',d:'M46 360 L88 368 L86 386 L44 378 Z'},{r:'trim',d:'M354 360 L312 368 L314 386 L356 378 Z'}]);
+const PRESETS=[
+ {n:'كلاسيك أبيض',m:'#f2f2f0',s:'#f2f2f0',t:'#14202b',st:'#9aa7b0'},
+ {n:'بلوك ألوان',m:'#14202b',s:'#6d2540',t:'#e8edf0',st:'#c9d3da'},
+ {n:'رياضي',m:'#e8edf0',s:'#c43d3d',t:'#c43d3d',st:'#14202b'},
+ {n:'بحري',m:'#22406b',s:'#f2f2f0',t:'#f2f2f0',st:'#e8edf0'},
+ {n:'رملي',m:'#cdbb9c',s:'#8a6f4d',t:'#4a3a28',st:'#f2ead9'},
+ {n:'ميدنايت',m:'#0f1720',s:'#0f1720',t:'#c9a45c',st:'#c9a45c'},
+ {n:'زيتوني',m:'#5b6b46',s:'#49573a',t:'#e8e2cf',st:'#d8d2bc'},
+ {n:'وردي باستيل',m:'#efc9cf',s:'#efc9cf',t:'#7a3b4b',st:'#b98894'},
+ {n:'رمادي عصري',m:'#8c96a0',s:'#6f7983',t:'#f2f2f0',st:'#e6eaed'},
+ {n:'خطوط بحرية',m:'#f2f2f0',s:'#f2f2f0',t:'#22406b',st:'#22406b',p:'stripes'},
+ {n:'كاروهات',m:'#d9cdb4',s:'#d9cdb4',t:'#7a2f2f',st:'#7a2f2f',p:'check'},
+ {n:'تدرّج داكن',m:'#4a6fa5',s:'#4a6fa5',t:'#14202b',st:'#e8edf0',p:'fade'}];
+const SW=['#ffffff','#14202b','#c43d3d','#22406b','#6d2540','#d9a441','#7a4e8f','#cdbb9c','#e58ba6'];
+const st={pat:'none',g:'tshirt',back:false,items:{front:[],back:[]},sel:null,c:{main:'#f2f2f0',sec:'#f2f2f0',trim:'#14202b',stitch:'#9aa7b0'}};
+const $=id=>document.getElementById(id), svg=$('svg');
+const cur=()=>st.items[st.back?'back':'front'];
+
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
+
+function render(){
+  svg.innerHTML='';
+  const g=(st.back&&G[st.g].back)?Object.assign({},G[st.g],G[st.g].back):G[st.g];
+  const defs=el('defs',{},svg);
+  const cp=el('clipPath',{id:'clip'},defs);
+  g.parts.filter(p=>p.body).forEach(p=>el('path',{d:p.d},cp));
+  el('ellipse',{cx:200,cy:462,rx:130,ry:9,fill:'rgba(0,0,0,.12)'},svg);
+  const shade=el('linearGradient',{id:'sh',x1:0,x2:1},defs);
+  [['0','rgba(0,0,0,.12)'],['.5','rgba(255,255,255,.10)'],['1','rgba(0,0,0,.14)']].forEach(([o,c])=>el('stop',{offset:o,'stop-color':c},shade));
+  const pc=st.c.trim;
+  const mk=(id,w,h,fn)=>fn(el('pattern',{id,width:w,height:h,patternUnits:'userSpaceOnUse'},defs));
+  mk('p_stripes',12,12,p=>el('rect',{width:5,height:12,fill:pc,opacity:.35},p));
+  mk('p_pin',6,6,p=>el('rect',{width:1,height:6,fill:pc,opacity:.4},p));
+  mk('p_dots',14,14,p=>el('circle',{cx:7,cy:7,r:2.4,fill:pc,opacity:.4},p));
+  mk('p_check',20,20,p=>{el('rect',{width:10,height:10,fill:pc,opacity:.28},p);el('rect',{x:10,y:10,width:10,height:10,fill:pc,opacity:.28},p)});
+  const fd=el('linearGradient',{id:'p_fade',x1:0,y1:0,x2:0,y2:1},defs);
+  el('stop',{offset:0,'stop-color':pc,'stop-opacity':0},fd);el('stop',{offset:1,'stop-color':pc,'stop-opacity':.6},fd);
+  const shape=el('g',{},svg);
+  g.parts.forEach(p=>{
+    el('path',{d:p.d,fill:st.c[p.r],stroke:'rgba(0,0,0,.28)','stroke-width':1.2,'stroke-linejoin':'round'},shape);
+    if(st.pat!=='none'&&p.r==='main')el('path',{d:p.d,fill:'url(#p_'+st.pat+')'},shape);
+    el('path',{d:p.d,fill:'url(#sh)'},shape);
+  });
+  g.stitch.forEach(d=>el('path',{d,fill:'none',stroke:st.c.stitch,'stroke-width':1.3,'stroke-dasharray':'4 3','stroke-linecap':'round'},svg));
+  const layer=el('g',{'clip-path':'url(#clip)',id:'layer'},svg);
+  cur().forEach(it=>{
+    const n=el('g',{transform:`translate(${it.x} ${it.y}) rotate(${it.rot})`,style:'cursor:move'},layer);
+    n.dataset.id=it.id;
+    let box;
+    if(it.type==='text'){
+      const t=el('text',{'text-anchor':'middle','dominant-baseline':'middle','font-family':it.font,'font-size':it.size,fill:it.color,'font-weight':700},n);
+      t.textContent=it.text;
+    }else{
+      el('image',{href:it.src,x:-it.size/2,y:-it.size*it.ar/2,width:it.size,height:it.size*it.ar,preserveAspectRatio:'none'},n);
+    }
+    n.addEventListener('pointerdown',e=>startDrag(e,it,n));
+  });
+  if(st.sel){
+    const n=layer.querySelector(`[data-id="${st.sel}"]`);
+    if(n){const b=n.getBBox();el('rect',{x:b.x-4,y:b.y-4,width:b.width+8,height:b.height+8,fill:'none',stroke:'#6d2540','stroke-width':1.2,'stroke-dasharray':'5 3',class:'selbox'},n)}
+  }
+  $('title').textContent=g.name+(st.back?' — الخلف':' — الأمام');
+  syncEditor();
+}
+
+function pt(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+function startDrag(e,it,n){
+  e.preventDefault();st.sel=it.id;
+  const s=pt(e),ox=it.x-s.x,oy=it.y-s.y;
+  const mv=ev=>{const p=pt(ev);it.x=p.x+ox;it.y=p.y+oy;n.setAttribute('transform',`translate(${it.x} ${it.y}) rotate(${it.rot})`)};
+  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);render()};
+  addEventListener('pointermove',mv);addEventListener('pointerup',up);
+}
+svg.addEventListener('pointerdown',e=>{if(e.target===svg||!e.target.closest('#layer')){st.sel=null;render()}});
+
+function selItem(){return cur().find(i=>i.id===st.sel)}
+function syncEditor(){
+  const it=selItem();$('editor').style.display=it?'block':'none';if(!it)return;
+  $('textCtl').style.display=it.type==='text'?'block':'none';
+  if(it.type==='text'){$('tVal').value=it.text;$('tFont').value=it.font;$('tCol').value=it.color}
+  $('size').value=it.size;$('rot').value=it.rot;
+}
+let uid=1;
+$('addText').onclick=()=>{const it={id:'i'+uid++,type:'text',text:'اسمك هنا',x:200,y:200,size:44,rot:0,font:'Reem Kufi',color:'#14202b'};cur().push(it);st.sel=it.id;render()};
+$('addImg').onclick=()=>$('file').click();
+$('file').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{
+    const it={id:'i'+uid++,type:'img',src:r.result,x:200,y:220,size:130,ar:im.height/im.width,rot:0};
+    cur().push(it);st.sel=it.id;render()};im.src=r.result};
+  r.readAsDataURL(f);e.target.value='';
+};
+$('tVal').oninput=e=>{const i=selItem();i.text=e.target.value;render();$('tVal').focus()};
+$('tFont').onchange=e=>{selItem().font=e.target.value;render()};
+$('tCol').oninput=e=>{selItem().color=e.target.value;render()};
+$('size').oninput=e=>{selItem().size=+e.target.value;render()};
+$('rot').oninput=e=>{selItem().rot=+e.target.value;render()};
+$('del').onclick=()=>{const a=cur();a.splice(a.findIndex(i=>i.id===st.sel),1);st.sel=null;render()};
+$('flip').onclick=()=>{st.back=!st.back;st.sel=null;render()};
+
+/* colors */
+const map={cMain:'main',cSec:'sec',cTrim:'trim',cStitch:'stitch'};
+function syncColors(){for(const k in map)$(k).value=st.c[map[k]]}
+for(const k in map)$(k).oninput=e=>{st.c[map[k]]=e.target.value;render()};
+SW.forEach(c=>{const b=document.createElement('button');b.className='sw';b.style.background=c;b.title='لوّن القماش الأساسي والأكمام';b.setAttribute('aria-label',c);
+  b.onclick=()=>{st.c.main=st.c.sec=c;syncColors();render()};$('swatches').appendChild(b)});
+
+/* garments + presets */
+Object.entries(G).forEach(([k,v])=>{const b=document.createElement('button');b.className='gcard'+(k===st.g?' on':'');
+  b.innerHTML='<svg viewBox="0 0 400 480">'+v.parts.map(p=>'<path d="'+p.d+'" fill="currentColor"/>').join('')+'</svg><span>'+v.name+'</span>';
+  b.onclick=()=>{st.g=k;document.querySelectorAll('.gcard').forEach(x=>x.classList.toggle('on',x===b));st.sel=null;render()};$('garments').appendChild(b)});
+[['none','بدون'],['stripes','خطوط'],['pin','خطوط رفيعة'],['dots','نقاط'],['check','مربعات'],['fade','تدرّج']].forEach(([k,n])=>{
+  const b=document.createElement('button');b.className='chip'+(k===st.pat?' on':'');b.textContent=n;b.dataset.k=k;
+  b.onclick=()=>{st.pat=k;syncPat();render()};$('patterns').appendChild(b)});
+function syncPat(){document.querySelectorAll('#patterns .chip').forEach(x=>x.classList.toggle('on',x.dataset.k===st.pat))}
+PRESETS.forEach(p=>{const b=document.createElement('button');b.className='chip';b.innerHTML='<i class="pdot" style="background:'+p.m+'"></i>'+p.n;
+  b.onclick=()=>{st.c={main:p.m,sec:p.s,trim:p.t,stitch:p.st};st.pat=p.p||'none';syncColors();syncPat();render()};$('presets').appendChild(b)});
+
+/* export */
+$('save').onclick=()=>{
+  st.sel=null;render();
+  const c=svg.cloneNode(true);c.setAttribute('width',800);c.setAttribute('height',960);
+  c.style.background='';const bg=el('rect',{width:400,height:480,fill:'#eef2f4'});c.insertBefore(bg,c.firstChild);
+  const url='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(c));
+  const im=new Image();im.onload=()=>{
+    const cv=document.createElement('canvas');cv.width=800;cv.height=960;cv.getContext('2d').drawImage(im,0,0);
+    const a=document.createElement('a');a.download='my-design.png';a.href=cv.toDataURL('image/png');a.click()};
+  im.src=url;
+};
+render();
+</script>
+<script>
+const RAIL=[['tshirt',3],['hoodie',8],['jacket',6],['polo',4],['dress',7],['pants',5],['long',1]];
+function pick(k,p){st.g=k;st.sel=null;st.c={main:p.m,sec:p.s,trim:p.t,stitch:p.st};st.pat=p.p||'none';syncColors();syncPat();
+ document.querySelectorAll('.gcard').forEach(x=>x.classList.toggle('on',x.querySelector('span').textContent===G[k].name));render();document.getElementById('studio').scrollIntoView();}
+RAIL.forEach(([k,i])=>{const p=PRESETS[i],g=G[k],b=document.createElement('button');
+ b.innerHTML='<svg viewBox="0 0 400 520"><path d="M200 50V36Q200 16 218 16" fill="none" stroke="#16181d" stroke-width="3.5" stroke-linecap="round"/><path d="M124 104L200 50L276 104" fill="none" stroke="#16181d" stroke-width="3.5" stroke-linejoin="round"/><g transform="translate(0 40)">'+
+ g.parts.map(q=>'<path d="'+q.d+'" fill="'+({main:p.m,sec:p.s,trim:p.t})[q.r]+'" stroke="rgba(0,0,0,.28)" stroke-width="1.5" stroke-linejoin="round"/>').join('')+'</g></svg><span>'+g.name+'</span>';
+ b.onclick=()=>pick(k,p);document.getElementById('rail').appendChild(b)});
+</script>
+</body>
+</html>
